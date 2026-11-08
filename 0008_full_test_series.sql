@@ -337,8 +337,8 @@ from (
   select 'test-pyq-trend-polity-01' as id, 'sub-polity' as subject,
          'PYQ Trend MCQs — Polity & Constitution' as title_en,
          'PYQ ट्रेंड MCQs — राजव्यवस्था एवं संविधान' as title_hi,
-         'MCQs on the BPSC themes that repeat most often: rights, DPSP, Preamble, President, Parliament.',
-         'वे BPSC थीम जो बार-बार दोहराई जाती हैं: अधिकार, नीति निदेशक तत्व, प्रस्तावना, राष्ट्रपति, संसद।',
+         'MCQs on the BPSC themes that repeat most often: rights, DPSP, Preamble, President, Parliament.' as desc_en,
+         'वे BPSC थीम जो बार-बार दोहराई जाती हैं: अधिकार, नीति निदेशक तत्व, प्रस्तावना, राष्ट्रपति, संसद।' as desc_hi,
          'pyq_trends' as ttype, 60 as sort,
          jsonb_build_object('category','pyq_trends','source','curated') as settings,
          (select count(*) from questions
