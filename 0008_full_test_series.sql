@@ -173,6 +173,8 @@ on conflict (id) do update set
   description_hi = excluded.description_hi, sort_order = excluded.sort_order,
   is_active = true;
 
+-- (book_chapter_tests mappings are inserted at the end, after all tests exist)
+
 insert into book_chapters (id, book_id, chapter_no, name_en, name_hi, sort_order) values
   ('bch-hist-ancient',  'book-hist-comp',  '1', 'Ancient India',        'प्राचीन भारत', 1),
   ('bch-hist-medieval', 'book-hist-comp',  '2', 'Medieval India',       'मध्यकालीन भारत', 2),
@@ -194,28 +196,6 @@ insert into book_chapters (id, book_id, chapter_no, name_en, name_hi, sort_order
   ('bch-bihar-today',   'book-bihar-comp','3', 'Bihar Today',          'आज का बिहार', 3),
   ('bch-ca-current',    'book-ca-comp',    '1', 'Recent Affairs',       'ताज़ा घटनाएँ', 1)
 on conflict (id) do update set name_en = excluded.name_en, name_hi = excluded.name_hi, sort_order = excluded.sort_order;
-
-insert into book_chapter_tests (test_id, chapter_id) values
-  ('test-bpsc-ch-hist-ancient',  'bch-hist-ancient'),
-  ('test-bpsc-ch-hist-medieval', 'bch-hist-medieval'),
-  ('test-bpsc-ch-hist-modern',   'bch-hist-modern'),
-  ('test-bpsc-ch-geo-physical',  'bch-geo-physical'),
-  ('test-bpsc-ch-geo-india',     'bch-geo-india'),
-  ('test-bpsc-ch-geo-bihar',     'bch-geo-bihar'),
-  ('test-bpsc-ch-pol-constitution','bch-pol-foundation'),
-  ('test-bpsc-ch-pol-executive',  'bch-pol-executive'),
-  ('test-bpsc-ch-pol-judiciary',  'bch-pol-judiciary'),
-  ('test-bpsc-ch-econ-macro',     'bch-econ-macro'),
-  ('test-bpsc-ch-econ-growth',    'bch-econ-growth'),
-  ('test-bpsc-ch-econ-external',  'bch-econ-external'),
-  ('test-bpsc-ch-sci-physics',    'bch-sci-physics'),
-  ('test-bpsc-ch-sci-chem',       'bch-sci-chem'),
-  ('test-bpsc-ch-sci-bio',        'bch-sci-bio'),
-  ('test-bpsc-ch-bihar-heritage', 'bch-bihar-heritage'),
-  ('test-bpsc-ch-bihar-freedom',  'bch-bihar-freedom'),
-  ('test-bpsc-ch-bihar-today',    'bch-bihar-today'),
-  ('test-ca-mixed-01',            'bch-ca-current')
-on conflict (test_id) do update set chapter_id = excluded.chapter_id;
 
 -- ── 6. category tests ───────────────────────────────────────────
 -- Subject tests pull their questions from the live pool at attempt time
@@ -421,6 +401,29 @@ where q.status = 'published'
   and ((q.subject_id = 'sub-geo' and q.topic in ('Atmosphere','Rocks','Latitude and Longitude',
               'Indian Rivers','Bihar Rivers','Indian Monsoon','Soils of India'))
     or (q.subject_id = 'sub-sci' and q.topic = 'Environment'));
+
+-- Book chapters map to the real tests, now that every test exists.
+insert into book_chapter_tests (test_id, chapter_id) values
+  ('test-bpsc-ch-hist-ancient',  'bch-hist-ancient'),
+  ('test-bpsc-ch-hist-medieval', 'bch-hist-medieval'),
+  ('test-bpsc-ch-hist-modern',   'bch-hist-modern'),
+  ('test-bpsc-ch-geo-physical',  'bch-geo-physical'),
+  ('test-bpsc-ch-geo-india',     'bch-geo-india'),
+  ('test-bpsc-ch-geo-bihar',     'bch-geo-bihar'),
+  ('test-bpsc-ch-pol-constitution','bch-pol-foundation'),
+  ('test-bpsc-ch-pol-executive',  'bch-pol-executive'),
+  ('test-bpsc-ch-pol-judiciary',  'bch-pol-judiciary'),
+  ('test-bpsc-ch-econ-macro',     'bch-econ-macro'),
+  ('test-bpsc-ch-econ-growth',    'bch-econ-growth'),
+  ('test-bpsc-ch-econ-external',  'bch-econ-external'),
+  ('test-bpsc-ch-sci-physics',    'bch-sci-physics'),
+  ('test-bpsc-ch-sci-chem',       'bch-sci-chem'),
+  ('test-bpsc-ch-sci-bio',        'bch-sci-bio'),
+  ('test-bpsc-ch-bihar-heritage', 'bch-bihar-heritage'),
+  ('test-bpsc-ch-bihar-freedom',  'bch-bihar-freedom'),
+  ('test-bpsc-ch-bihar-today',    'bch-bihar-today'),
+  ('test-ca-mixed-01',            'bch-ca-current')
+on conflict (test_id) do update set chapter_id = excluded.chapter_id;
 
 -- The full mock keeps its own category badge in the fresh hub.
 update tests
